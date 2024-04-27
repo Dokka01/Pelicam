@@ -1,0 +1,7 @@
+scapy
+opencv_python
+psutil
+socket
+ipaddress
+datetime
+
