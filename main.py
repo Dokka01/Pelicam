@@ -1,6 +1,7 @@
 import subprocess
 
 # auto-install library if you dont have them
+print("initializing libraries...")
 libraries = ["opencv-python", "psutil", "ipaddress", "datetime", "scapy", "onvif_zeep"]
 missing_libraries = [lib for lib in libraries if lib not in subprocess.check_output(["pip", "freeze"]).decode()]
 if missing_libraries:
