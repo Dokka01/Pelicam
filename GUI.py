@@ -1,89 +1,72 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QMainWindow
-import sys
-
-# CONSTANTES
-XPOS = 200
-YPOS = 200
-WIDTH = 642
-HEIGHT = 368
+from PyQt5.QtWidgets import QMainWindow, QLabel, QFrame, QComboBox, QRadioButton, QPushButton
+from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtGui import QFont
 
 class Window(QMainWindow):
+    # Signaux
+    rtsp_selected = pyqtSignal()
+    onvif_selected = pyqtSignal()
+    scan_selected = pyqtSignal()
+
     def __init__(self):
         super(Window, self).__init__()
-        self.setGeometry(XPOS, YPOS, WIDTH, HEIGHT)
+        self.setGeometry(200, 200, 642, 368)
         self.setWindowTitle("Pelicam GUI")
         self.initUI()
 
     def initUI(self):
-        self.label = QtWidgets.QLabel(self)
-        self.label.setGeometry(QtCore.QRect(260, 10, 111, 31))
-        font = QtGui.QFont()
+        self.label = QLabel(self)
+        self.label.setGeometry(260, 10, 111, 31)
+        font = QFont()
         font.setPointSize(25)
         self.label.setFont(font)
-        self.label.setObjectName("label")
         self.label.setText("Pelicam")
 
-        self.line = QtWidgets.QFrame(self)
-        self.line.setGeometry(QtCore.QRect(300, 40, 21, 321))
-        self.line.setFrameShape(QtWidgets.QFrame.VLine)
-        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line.setObjectName("line")
+        self.line = QFrame(self)
+        self.line.setGeometry(300, 40, 21, 320)
+        self.line.setFrameShape(QFrame.VLine)
+        self.line.setFrameShadow(QFrame.Sunken)
 
-        self.comboBox = QtWidgets.QComboBox(self)
-        self.comboBox.setGeometry(QtCore.QRect(10, 150, 69, 22))
-        self.comboBox.setObjectName("comboBox")
+        self.comboBox = QComboBox(self)
+        self.comboBox.setGeometry(10, 150, 69, 22)
 
-        self.label_2 = QtWidgets.QLabel(self)
-        self.label_2.setGeometry(QtCore.QRect(80, 150, 111, 16))
-        self.label_2.setObjectName("label_2")
-        self.label_2.setText(" choix de l\'ip a attack")
+        self.label_2 = QLabel(self)
+        self.label_2.setGeometry(80, 150, 111, 16)
+        self.label_2.setText("Choix de l'IP à attaquer")
 
-        self.radioButton = QtWidgets.QRadioButton(self)
-        self.radioButton.setGeometry(QtCore.QRect(20, 90, 51, 17))
-        self.radioButton.setObjectName("radioButton")
+        self.radioButton = QRadioButton(self)
+        self.radioButton.setGeometry(20, 90, 51, 17)
         self.radioButton.setText("ONVIF")
 
-        self.radioButton_2 = QtWidgets.QRadioButton(self)
-        self.radioButton_2.setGeometry(QtCore.QRect(200, 90, 51, 17))
-        self.radioButton_2.setObjectName("radioButton_2")
+        self.radioButton_2 = QRadioButton(self)
+        self.radioButton_2.setGeometry(200, 90, 51, 17)
         self.radioButton_2.setText("RTSP")
 
-        self.radioButton_3 = QtWidgets.QRadioButton(self)
-        self.radioButton_3.setGeometry(QtCore.QRect(90, 90, 91, 17))
-        self.radioButton_3.setObjectName("radioButton_3")
-        self.radioButton_3.setText("Scan network")
+        self.radioButton_3 = QRadioButton(self)
+        self.radioButton_3.setGeometry(90, 90, 91, 17)
+        self.radioButton_3.setText("Scan réseau")
 
-        self.line_2 = QtWidgets.QFrame(self)
-        self.line_2.setGeometry(QtCore.QRect(0, 40, WIDTH, 20))
-        self.line_2.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line_2.setObjectName("line_2")
+        self.line_2 = QFrame(self)
+        self.line_2.setGeometry(0, 40, 642, 20)
+        self.line_2.setFrameShape(QFrame.HLine)
+        self.line_2.setFrameShadow(QFrame.Sunken)
 
-        self.label_3 = QtWidgets.QLabel(self)
-        self.label_3.setGeometry(QtCore.QRect(80, 60, 131, 21))
-        font = QtGui.QFont()
+        self.label_3 = QLabel(self)
+        self.label_3.setGeometry(80, 60, 131, 21)
+        font = QFont()
         font.setPointSize(12)
         self.label_3.setFont(font)
-        self.label_3.setObjectName("label_3")
-        self.label_3.setText("Choisissez l\'option")
+        self.label_3.setText("Choisissez l'option")
 
-        self.b1 = QtWidgets.QPushButton(self)
-        self.b1.setGeometry(QtCore.QRect(10, 250, 100, 30))
-        self.b1.setObjectName("b1")
-        self.b1.setText("button")
-        self.b1.clicked.connect(self.clicked)
+        self.b1 = QPushButton(self)
+        self.b1.setGeometry(10, 250, 100, 30)
+        self.b1.setText("Bouton")
+        self.b1.clicked.connect(self.clicked_button)
 
-    def clicked(self):
-        self.label.setText("button pressed")
-        self.uptade()
-
-    def uptade(self):
-        self.label.adjustSize()
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = Window()
-    window.show()
-    sys.exit(app.exec_())
+    def clicked_button(self):
+        if self.radioButton.isChecked():
+            self.onvif_selected.emit()
+        elif self.radioButton_2.isChecked():
+            self.rtsp_selected.emit()
+        elif self.radioButton_3.isChecked():
+            self.scan_selected.emit()
