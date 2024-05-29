@@ -42,27 +42,27 @@ def CDIR_check(subnets):
             
 def scan_arp(subnet_to_scan):
     if len(subnet_to_scan) == 1:
-        subnet = subnet_to_scan[0]
-        print(f"Scanning subnet : {subnet}")
+        selected_subnet = subnet_to_scan[0]  # uptade
+        print(f"Scanning subnet: {selected_subnet}")
     else:
-        print("\n\033[1mHere are all the subnets found : \033[0m")
+        print("\n\033[1mHere are all the subnets found: \033[0m")
         for num, cdir in enumerate(subnet_to_scan, 1):
             print(f"{num}. {cdir}")
 
         while True:
             try:
-                choice = int(input("\033[1mChoose one of them : \033[0m"))
+                choice = int(input("\033[1mChoose one of them: \033[0m"))
                 if 1 <= choice <= len(subnet_to_scan):
-                    selected_subnet = subnet_to_scan[choice - 1]
+                    selected_subnet = subnet_to_scan[choice - 1]  # uptade
                     print(f"\n\033[1mScanning subnet: {selected_subnet}\033[0m")
                     break
                 else:
-                    print("Numéro invalide. Veuillez sélectionner un numéro valide.")
+                    print("Invalid number. Please select a valid number.")
             except ValueError:
-                print("Veuillez entrer un numéro valide.")
-            
-    ans, unans = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=selected_subnet), timeout=3)
-    addresses_dict = {} 
+                print("Please enter a valid number.")
+
+    ans, unans = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=selected_subnet), timeout=3)  # uptade
+    addresses_dict = {}
 
     for sent, received in ans:
         mac_address = received[Ether].src.upper()
@@ -70,6 +70,7 @@ def scan_arp(subnet_to_scan):
         addresses_dict[ip_address] = mac_address
 
     return addresses_dict
+
 
 def mac_verif(found_addresses):
     objet_num = 1  
